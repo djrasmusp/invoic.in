@@ -8,5 +8,6 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     database: process.env.NUXT_POSTGRES_URL
-  }
+  },
+  modules: ['@nuxt/eslint']
 })
