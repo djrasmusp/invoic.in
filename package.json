@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "invoic.in",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,15 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "consola": "^3.4.0",
+    "drizzle-orm": "^0.40.0",
+    "drizzle-seed": "^0.3.1",
     "nuxt": "^3.15.4",
+    "pg": "^8.13.3",
     "vue": "latest"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.11",
+    "drizzle-kit": "^0.30.5"
   }
 }
