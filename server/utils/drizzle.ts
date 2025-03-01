@@ -1,9 +1,17 @@
 import * as schema from '@@/server/database/schemas'
-import { drizzle } from 'drizzle-orm/postgres-js'
-import { usePostgres } from '~~/server/utils/postgres'
+import { drizzle } from 'drizzle-orm/node-postgres'
 
 export const tbl = schema
 
 export function useDrizzle() {
-  return drizzle(usePostgres(), { schema, logger: true })
+  const runtimeConfig = useRuntimeConfig()
+
+  if (!runtimeConfig.database) {
+    throw createError('Missing `NUXT_POSTGRES_URL` environment variable')
+  }
+
+  return drizzle(runtimeConfig.database as string, {
+    schema,
+    logger: true,
+  })
 }

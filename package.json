@@ -8,16 +8,24 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "db:push": "npx drizzle-kit push",
+    "db:generate": "npx drizzle-kit generate",
+    "db:migrate": "npx drizzle-kit migrate",
+    "db:triggers": "npx tsx server/database/commands/triggers.ts",
+    "db:seed": "npm run db:reset && npx tsx server/database/commands/seed.ts",
+    "db:reset": "npx tsx server/database/commands/reset.ts"
   },
   "dependencies": {
+    "@akashrajpurohit/snowflake-id": "^2.0.0",
     "drizzle-orm": "^0.40.0",
     "drizzle-seed": "^0.3.1",
+    "drizzle-zod": "^0.7.0",
     "nuxt": "^3.15.4",
     "pg": "^8.13.3",
-    "vue": "latest"
+    "vue": "latest",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.1.0",
