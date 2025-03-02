@@ -1,5 +1,6 @@
 import { consola } from 'consola'
 import { sql } from 'drizzle-orm'
+import { dbConnection } from './utils'
 
 const triggerInvoiceTotalsAfterInsert = sql`
     CREATE TRIGGER update_invoice_totals_after_insert
@@ -29,7 +30,7 @@ const triggerInvoiceTotalsAfterUpdate = sql`
 async function main() {
   consola.start('Start adding database triggers...')
 
-  await useDrizzle()
+  await dbConnection()
     .execute(triggerInvoiceTotalsAfterInsert)
     .then(() => {
       consola.info('Added trigger: Invoice Totals after INSERT')
@@ -38,7 +39,7 @@ async function main() {
       consola.error(error)
     })
 
-  await useDrizzle()
+  await dbConnection()
     .execute(triggerInvoiceTotalsAfterUpdate)
     .then(() => {
       consola.info('Added trigger: Invoice Totals after UPDATE')

@@ -1,22 +1,38 @@
 import { SnowflakeId } from '@akashrajpurohit/snowflake-id'
-import { bigint, timestamp } from 'drizzle-orm/pg-core'
-import { sql } from 'drizzle-orm'
+import { timestamp, customType } from 'drizzle-orm/pg-core'
 
-export const snowflake = SnowflakeId({
+export const snowflakeId = SnowflakeId({
   workerId: process.pid % 1024,
   epoch: 1740865739,
 })
 
-export const snowflakeId = {
-  id: bigint({ mode: 'number' })
+// Custom Type for primary SnowflakeId
+// This is to preserve the performance at DB level and not getting errors in javascript, as BigInt does work well with JSON
+export const snowflakeKey = customType<{
+  data: string
+  driverData: bigint
+}>({
+  dataType() {
+    return 'bigint'
+  },
+  toDriver(value: string) {
+    return BigInt(value)
+  },
+  fromDriver(value: bigint) {
+    return value.toString()
+  },
+})
+
+export const snowflake = {
+  id: snowflakeKey()
     .primaryKey()
-    .$defaultFn(() => snowflake.generate() as unknown as number),
+    .$defaultFn(() => snowflakeId.generate()),
 }
 
-export const solftDeleteColumns = {
+export const softDeleteColumns = {
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-  updatedAt: timestamp('updated_at', { mode: 'date' })
-    .default(sql`CURRENT_TIMESTAMP() on
-        update CURRENT_TIMESTAMP()`),
+  updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(
+    () => new Date()
+  ),
   deletedAt: timestamp('deleted_at', { mode: 'date' }),
 }

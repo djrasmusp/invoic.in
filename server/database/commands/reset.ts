@@ -1,9 +1,11 @@
 import { reset } from 'drizzle-seed'
 import { consola } from 'consola'
+import { dbConnection } from './utils'
+import { tbl } from '../../utils/drizzle'
 
 async function main() {
   consola.start('Resetting database started...')
-  await reset(useDrizzle(), tbl)
+  await reset(dbConnection(), tbl)
 }
 
 main()
