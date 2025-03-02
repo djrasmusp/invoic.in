@@ -1,11 +1,12 @@
-import { eq } from 'drizzle-orm'
+import { eq, getTableColumns } from 'drizzle-orm'
+import { lower } from '../schemas'
+import { WebAuthnCredential } from '#auth-utils'
 
 export async function getUserByEmail(email: string): Promise<User | null> {
   const [user] = await useDrizzle()
     .select()
     .from(tbl.users)
-    .where(eq(tbl.users.email, email))
-    .limit(1)
+    .where(eq(lower(tbl.users.email), email.toLowerCase()))
   return user
 }
 
@@ -14,7 +15,20 @@ export async function getUserById(id: string): Promise<User | null> {
     .select()
     .from(tbl.users)
     .where(eq(tbl.users.id, id))
-    .limit(1)
+  return user
+}
+
+export async function getUserByCredential(
+  credential: WebAuthnCredential
+): Promise<User | null> {
+  const selectedColumns = getTableColumns(tbl.users)
+
+  const [user] = await useDrizzle()
+    .select(selectedColumns)
+    .from(tbl.credentials)
+    .innerJoin(tbl.users, eq(tbl.users.id, tbl.credentials.userId))
+    .where(eq(tbl.credentials.id, credential.id))
+
   return user
 }
 
@@ -34,4 +48,11 @@ export async function updateUser(id: string, payload: Partial<InsertUser>) {
     .returning()
 
   return user
+}
+
+export async function deleteUser(id: string): Promise<void> {
+  await useDrizzle()
+    .update(tbl.users)
+    .set({ deletedAt: new Date() })
+    .where(eq(tbl.users.id, id))
 }

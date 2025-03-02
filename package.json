@@ -19,10 +19,13 @@
   },
   "dependencies": {
     "@akashrajpurohit/snowflake-id": "^2.0.0",
+    "@simplewebauthn/browser": "^11.0.0",
+    "@simplewebauthn/server": "^11.0.0",
     "drizzle-orm": "^0.40.0",
     "drizzle-seed": "^0.3.1",
     "drizzle-zod": "^0.7.0",
     "nuxt": "^3.15.4",
+    "nuxt-auth-utils": "^0.5.16",
     "pg": "^8.13.3",
     "vue": "latest",
     "zod": "^3.24.2"
