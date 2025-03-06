@@ -8,7 +8,7 @@ export const snowflakeId = SnowflakeId({
 
 // Custom Type for primary SnowflakeId
 // This is to preserve the performance at DB level and not getting errors in javascript, as BigInt does work well with JSON
-export const snowflakeKey = customType<{
+export const bigIntToString = customType<{
   data: string
   driverData: bigint
 }>({
@@ -24,7 +24,7 @@ export const snowflakeKey = customType<{
 })
 
 export const snowflake = {
-  id: snowflakeKey()
+  id: bigIntToString()
     .primaryKey()
     .$defaultFn(() => snowflakeId.generate()),
 }

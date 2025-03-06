@@ -1,29 +1,34 @@
 import { WebAuthnCredential } from '#auth-utils'
 import { VerifiedAuthenticationResponse } from '@simplewebauthn/server'
-import { eq, getTableColumns } from 'drizzle-orm'
+import { eq, getTableColumns, sql } from 'drizzle-orm'
 import { lower } from '../schemas'
+import { type Credential } from '@@/shared/types'
 
 export async function getCredentialByEmail(
   email: string
 ): Promise<Credential | null> {
   const selectedColumns = getTableColumns(tbl.credentials)
 
-  const [credential] = await useDrizzle()
+  const prepared = useDrizzle()
     .select(selectedColumns)
-    .from(tbl.users)
-    .leftJoin(tbl.credentials, eq(tbl.credentials.userId, tbl.users.id))
-    .where(eq(lower(tbl.users.email), email.toLowerCase()))
+    .from(tbl.credentials)
+    .leftJoin(tbl.users, eq(tbl.credentials.userId, tbl.users.id))
+    .where(eq(lower(tbl.users.email), sql.placeholder('email')))
+
+  const [credential] = await prepared.execute({ email: email.toLowerCase() })
 
   return credential
 }
 
 export async function getCredentialById(
-  credentialId: string
+  id: string
 ): Promise<Credential | null> {
-  const [credential] = await useDrizzle()
+  const prepared = useDrizzle()
     .select()
     .from(tbl.credentials)
-    .where(eq(tbl.credentials.id, credentialId))
+    .where(eq(tbl.credentials.id, sql.placeholder('id')))
+
+  const [credential] = await prepared.execute({ id: id })
 
   return credential
 }
@@ -32,24 +37,40 @@ export async function createCredential(
   user: User,
   credential: WebAuthnCredential
 ): Promise<void> {
-  await useDrizzle()
+  const prepared = useDrizzle()
     .insert(tbl.credentials)
     .values({
-      userId: user.id as unknown as bigint,
-      id: credential.id,
-      publicKey: credential.publicKey,
-      counter: credential.counter,
-      backedUp: credential.backedUp ? 1 : 0,
-      transports: JSON.stringify(credential.transports ?? []),
+      userId: sql.placeholder('userId'),
+      id: sql.placeholder('id'),
+      publicKey: sql.placeholder('publicKey'),
+      counter: sql.placeholder('counter'),
+      backedUp: sql.placeholder('backedUp'),
+      transports: sql.placeholder('transports'),
     })
+
+  await prepared.execute({
+    userId: user.id,
+    id: credential.id,
+    publicKey: credential.publicKey,
+    counter: credential.counter,
+    backedUp: credential.backedUp ? 1 : 0,
+    transports: JSON.stringify(credential.transports ?? []),
+  })
 }
 
 export async function updateCredential(
   credential: WebAuthnCredential,
   authenticationInfo: VerifiedAuthenticationResponse['authenticationInfo']
 ): Promise<void> {
-  await useDrizzle()
+  const prepared = useDrizzle()
     .update(tbl.credentials)
-    .set({ counter: authenticationInfo.newCounter })
-    .where(eq(tbl.credentials.id, credential.id))
+    .set({
+      counter: sql.placeholder('counter') as unknown as number,
+    })
+    .where(eq(tbl.credentials.id, sql.placeholder('id')))
+
+  await prepared.execute({
+    counter: authenticationInfo.newCounter,
+    id: credential.id,
+  })
 }

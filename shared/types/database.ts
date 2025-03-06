@@ -9,3 +9,8 @@ export type Credential = typeof tbl.credentials.$inferSelect
 export type InsertCredential = typeof tbl.credentials.$inferInsert
 export const selectCredentialSchema = createSelectSchema(tbl.credentials)
 export const insertCredentialSchema = createInsertSchema(tbl.credentials)
+
+export type Company = typeof tbl.companies.$inferSelect
+export type InsertCompany = typeof tbl.companies.$inferInsert
+export const selectCompanySchema = createSelectSchema(tbl.companies)
+export const insertCompanySchema = createInsertSchema(tbl.companies)
