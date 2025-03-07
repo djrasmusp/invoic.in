@@ -2,13 +2,15 @@
   "name": "invoic.in",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "20"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
