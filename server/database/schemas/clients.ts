@@ -22,7 +22,7 @@ export const clients = pgTable(
       columns: [table.companyId],
       foreignColumns: [companies.id],
     }),
-    index('clientIndex').on(table.id, table.companyId),
-    index('clientCompanyIndex').on(table.companyId),
+    index('clientIndex').on(table.id, table.deletedAt),
+    index('clientCompanyIndex').on(table.companyId, table.deletedAt),
   ]
 )

@@ -22,7 +22,7 @@ export const companies = pgTable(
       columns: [table.userId],
       foreignColumns: [users.id],
     }).onDelete('cascade'),
-    index('companyIndex').on(table.id, table.userId),
-    index('companyUserIndex').on(table.userId),
+    index('companyIndex').on(table.id, table.deletedAt),
+    index('companyUserIndex').on(table.userId, table.deletedAt),
   ]
 )

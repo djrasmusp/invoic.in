@@ -43,17 +43,18 @@ export const invoices = pgTable(
       columns: [table.clientId],
       foreignColumns: [clients.id],
     }).onDelete('cascade'),
+    index('invoiceIndex').on(table.id, table.deletedAt),
   ]
 )
 
-const invoiceTypeEnum = pgEnum('invoiceType', ['item', 'discount'])
+export const typesEnum = pgEnum('typesenum', ['item', 'discount'])
 
 export const invoiceItems = pgTable(
   'invoices_items',
   {
     id: snowflake.id,
     invoiceId: bigIntToString('invoice_id').notNull(),
-    invoiceType: invoiceTypeEnum().notNull().default('item'),
+    type: typesEnum('type').notNull().default('item'),
     name: text().notNull(),
     description: text(),
     quantity: integer().notNull().default(1),
@@ -65,7 +66,7 @@ export const invoiceItems = pgTable(
       name: 'invoice_fk',
       columns: [table.invoiceId],
       foreignColumns: [invoices.id],
-    }),
+    }).onDelete('cascade'),
     index('invoiceItemIndex').on(table.invoiceId),
   ]
 )

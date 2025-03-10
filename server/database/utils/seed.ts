@@ -1,4 +1,4 @@
-import { snowflakeId } from '@@/server/database/utils'
+import { snowflakeId } from './columns'
 
 export const seedArrayOfSnowflakeIds = (count: number): number[] => {
   const snowflakeIds = []
