@@ -15,6 +15,28 @@ async function main() {
         email: f.email(),
         ...softDeleteColumns(f),
       },
+      with: {
+        companies: 50,
+        credentials: 1,
+      },
+    },
+    companies: {
+      columns: {
+        ...primaryKeyId(f),
+        name: f.companyName(),
+        address: f.streetAddress(),
+        postcode: f.postcode(),
+        city: f.city(),
+        phone: f.phoneNumber({
+          prefixes: ['0045'],
+          generatedDigitsNumbers: 8,
+        }),
+        email: f.email(),
+        identity: f.phoneNumber({
+          generatedDigitsNumbers: 12,
+        }),
+        ...softDeleteColumns(f),
+      },
     },
   }))
 }

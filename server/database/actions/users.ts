@@ -21,12 +21,7 @@ export async function getUserByEmail(
     prepared = useDrizzle()
       .select()
       .from(tbl.users)
-      .where(
-        and(
-          eq(lower(tbl.users.email), sql.placeholder('email')),
-          isNotNull(tbl.users.deletedAt)
-        )
-      )
+      .where(eq(lower(tbl.users.email), sql.placeholder('email')))
       .prepare('get_user_by_email_with_trashed')
   }
 
@@ -51,12 +46,7 @@ export async function getUserById(
     prepared = useDrizzle()
       .select()
       .from(tbl.users)
-      .where(
-        and(
-          eq(tbl.users.id, sql.placeholder('id')),
-          isNotNull(tbl.users.deletedAt)
-        )
-      )
+      .where(eq(tbl.users.id, sql.placeholder('id')))
       .prepare('get_user_by_id_with_trashed')
   }
 
@@ -88,12 +78,7 @@ export async function getUserByCredential(
       .select(selectedColumns)
       .from(tbl.credentials)
       .innerJoin(tbl.users, eq(tbl.users.id, tbl.credentials.userId))
-      .where(
-        and(
-          eq(tbl.credentials.id, sql.placeholder('id')),
-          isNotNull(tbl.users.deletedAt)
-        )
-      )
+      .where(eq(tbl.credentials.id, sql.placeholder('id')))
       .prepare('get_user_by_credential_with_trashed')
   }
 
@@ -142,7 +127,7 @@ export async function updateUser(id: string, payload: Partial<InsertUser>) {
 export async function deleteUser(
   id: string,
   forceDelete: boolean = false
-): Promise<User | null> {
+): Promise<User> {
   if (forceDelete) {
     const prepared = useDrizzle()
       .delete(tbl.users)

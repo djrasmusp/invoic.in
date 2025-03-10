@@ -1,13 +1,14 @@
 import {
   pgTable,
   uniqueIndex,
+  index,
   text,
   integer,
   primaryKey,
   type AnyPgColumn,
   foreignKey,
 } from 'drizzle-orm/pg-core'
-import { bigIntToString, snowflake, softDeleteColumns } from '../utils/columns'
+import { bigIntToString, snowflake, softDeleteColumns } from '../utils'
 import { sql, type SQL } from 'drizzle-orm'
 
 export const users = pgTable(

@@ -14,3 +14,11 @@ export type Company = typeof tbl.companies.$inferSelect
 export type InsertCompany = typeof tbl.companies.$inferInsert
 export const selectCompanySchema = createSelectSchema(tbl.companies)
 export const insertCompanySchema = createInsertSchema(tbl.companies)
+
+export interface Pagenation<T> {
+  items: T[]
+  total: number
+  perPage: number
+  currentPage: number
+  lastPage: number
+}
