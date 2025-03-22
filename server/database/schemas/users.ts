@@ -46,7 +46,7 @@ export const credentials = pgTable(
   ]
 )
 
-export function lower(email: AnyPgColumn | any): SQL {
+export function lower(email: AnyPgColumn): SQL {
   return sql`lower(
     ${email}
     )`

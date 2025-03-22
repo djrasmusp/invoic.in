@@ -1,6 +1,35 @@
 import { z } from 'zod'
 import { createUser } from '~~/server/database/actions/users'
 
+defineRouteMeta({
+  openAPI: {
+    description: 'Create a new user',
+    parameters: [
+      {
+        in: 'query',
+        name: 'email',
+        required: true,
+        schema: {
+          type: 'string',
+        },
+      },
+      {
+        in: 'query',
+        name: 'password',
+        required: true,
+        schema: {
+          type: 'string',
+        },
+      },
+    ],
+    responses: {
+      201: {
+        description: 'User created successfully.',
+      },
+    },
+  },
+})
+
 export default defineEventHandler(async (event) => {
   const { email, password } = await readValidatedBody(
     event,

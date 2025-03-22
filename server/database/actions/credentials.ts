@@ -1,8 +1,8 @@
-import { WebAuthnCredential } from '#auth-utils'
-import { VerifiedAuthenticationResponse } from '@simplewebauthn/server'
+import type { WebAuthnCredential } from '#auth-utils'
+import type { VerifiedAuthenticationResponse } from '@simplewebauthn/server'
 import { eq, getTableColumns, sql } from 'drizzle-orm'
 import { lower } from '../schemas'
-import { type Credential } from '@@/shared/types'
+import type { Credential } from '@@/shared/types'
 
 export async function getCredentialByEmail(
   email: string

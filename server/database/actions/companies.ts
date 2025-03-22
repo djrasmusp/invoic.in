@@ -7,7 +7,7 @@ import {
   inArray,
   isNotNull,
 } from 'drizzle-orm'
-import { Pagenation } from '#shared/types'
+import type { Pagenation } from '#shared/types'
 import { primaryKeyTransformer } from '~~/server/database/utils'
 
 export async function getCompanies({
@@ -20,7 +20,7 @@ export async function getCompanies({
   currentPage?: number
   perPage?: number
   withTrashed?: boolean
-}): Promise<Pagenation<any>> {
+}): Promise<Pagenation<Company>> {
   let preparedCursor = useDrizzle()
     .select({
       id: tbl.companies.id,
@@ -68,7 +68,7 @@ export async function getCompanies({
 
   if (!cursorKeys.length)
     return {
-      items: cursorKeys,
+      items: [],
       total,
       perPage,
       currentPage,

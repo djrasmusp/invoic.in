@@ -1,6 +1,6 @@
 import { and, eq, getTableColumns, sql, isNull, isNotNull } from 'drizzle-orm'
 import { lower } from '../schemas'
-import { WebAuthnCredential } from '#auth-utils'
+import type { WebAuthnCredential } from '#auth-utils'
 
 export async function getUserByEmail(
   email: string,

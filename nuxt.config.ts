@@ -13,4 +13,9 @@ export default defineNuxtConfig({
   auth: {
     webAuthn: true,
   },
+  nitro: {
+    experimental: {
+      openAPI: true,
+    },
+  },
 })
