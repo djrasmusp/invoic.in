@@ -16,7 +16,7 @@ async function main() {
         ...softDeleteColumns(f),
       },
       with: {
-        companies: 50,
+        companies: 10,
         credentials: 1,
       },
     },
@@ -26,6 +26,29 @@ async function main() {
         name: f.companyName(),
         address: f.streetAddress(),
         postcode: f.postcode(),
+        city: f.city(),
+        phone: f.phoneNumber({
+          prefixes: ['0045'],
+          generatedDigitsNumbers: 8,
+        }),
+        email: f.email(),
+        identity: f.phoneNumber({
+          generatedDigitsNumbers: 12,
+        }),
+        ...softDeleteColumns(f),
+      },
+      with: {
+        clients: 20,
+      },
+    },
+    clients: {
+      columns: {
+        ...primaryKeyId(f),
+        name: f.companyName(),
+        address: f.streetAddress({
+          isUnique: true,
+        }),
+        zipcode: f.postcode(),
         city: f.city(),
         phone: f.phoneNumber({
           prefixes: ['0045'],
