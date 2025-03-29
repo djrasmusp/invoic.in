@@ -7,7 +7,7 @@ import {
   inArray,
   isNotNull,
 } from 'drizzle-orm'
-import type { Pagenation } from '#shared/types'
+import type { Pagenation, PagenationParams } from '#shared/types'
 import { primaryKeyTransformer } from '~~/server/database/utils'
 
 export async function getCompanies({
@@ -15,19 +15,14 @@ export async function getCompanies({
   currentPage = 1,
   perPage = 10,
   withTrashed = false,
-}: {
-  userId: string
-  currentPage?: number
-  perPage?: number
-  withTrashed?: boolean
-}): Promise<Pagenation<Company>> {
+}: PagenationParams): Promise<Pagenation<Company>> {
   let preparedCursor = useDrizzle()
     .select({
       id: tbl.companies.id,
       count: sql<number>`count(*) over()`,
     })
     .from(tbl.companies)
-    .leftJoin(tbl.users, eq(tbl.companies.userId, tbl.users.id))
+    .innerJoin(tbl.users, eq(tbl.companies.userId, tbl.users.id))
     .where(
       and(
         eq(tbl.companies.userId, sql.placeholder('userId')),
@@ -48,8 +43,8 @@ export async function getCompanies({
         count: sql<number>`count(*) over()`,
       })
       .from(tbl.companies)
-      .leftJoin(tbl.users, eq(tbl.companies.userId, tbl.users.id))
-      .where(and(eq(tbl.companies.userId, sql.placeholder('userId'))))
+      .innerJoin(tbl.users, eq(tbl.companies.userId, tbl.users.id))
+      .where(eq(tbl.companies.userId, sql.placeholder('userId')))
       .offset(
         ((sql.placeholder('currentPage') as unknown as number) - 1) *
           (sql.placeholder('perPage') as unknown as number)
@@ -80,11 +75,11 @@ export async function getCompanies({
   const prepared = useDrizzle()
     .select(selectedColumns)
     .from(tbl.companies)
-    .leftJoin(tbl.users, eq(tbl.companies.userId, tbl.users.id))
+    .innerJoin(tbl.users, eq(tbl.companies.userId, tbl.users.id))
     .where(inArray(tbl.companies.id, cursorKeys))
     .prepare('get_companies')
 
-  const items = await prepared.execute({ cursorKeys: cursorKeys })
+  const items = await prepared.execute()
 
   return {
     items,
@@ -103,7 +98,7 @@ export async function getCompanyById(
   let prepared = useDrizzle()
     .select(selectedColumns)
     .from(tbl.companies)
-    .leftJoin(tbl.users, eq(tbl.users.id, tbl.companies.userId))
+    .innerJoin(tbl.users, eq(tbl.users.id, tbl.companies.userId))
     .where(
       and(
         eq(tbl.companies.id, sql.placeholder('id')),
@@ -116,7 +111,7 @@ export async function getCompanyById(
     prepared = useDrizzle()
       .select(selectedColumns)
       .from(tbl.companies)
-      .leftJoin(tbl.users, eq(tbl.users.id, tbl.companies.userId))
+      .innerJoin(tbl.users, eq(tbl.users.id, tbl.companies.userId))
       .where(eq(tbl.companies.id, sql.placeholder('id')))
       .prepare('get_company_by_id_with_trashed')
   }

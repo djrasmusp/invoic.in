@@ -15,10 +15,22 @@ export type InsertCompany = typeof tbl.companies.$inferInsert
 export const selectCompanySchema = createSelectSchema(tbl.companies)
 export const insertCompanySchema = createInsertSchema(tbl.companies)
 
+export type Client = typeof tbl.clients.$inferSelect
+export type InsertClient = typeof tbl.clients.$inferInsert
+export const selectClientSchema = createSelectSchema(tbl.clients)
+export const insertClientSchema = createInsertSchema(tbl.clients)
+
 export interface Pagenation<T> {
   items: T[]
   total: number
   perPage: number
   currentPage: number
   lastPage: number
+}
+
+export interface PagenationParams {
+  userId: string
+  currentPage?: number
+  perPage?: number
+  withTrashed?: boolean
 }
