@@ -1,9 +1,10 @@
 {
   "name": "invoic.in",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "engines": {
-    "node": "20"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "build": "nuxt build",
@@ -12,27 +13,52 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "db:push": "npx drizzle-kit push",
+    "db:generate": "npx drizzle-kit generate",
+    "db:migrate": "npx drizzle-kit migrate",
+    "db:triggers": "npx tsx server/database/commands/triggers.ts",
+    "db:seed": "npm run db:reset && npx tsx server/database/commands/seed.ts",
+    "db:reset": "npx tsx server/database/commands/reset.ts"
   },
   "dependencies": {
-    "drizzle-orm": "^0.40.0",
+    "@akashrajpurohit/snowflake-id": "^2.0.0",
+    "@simplewebauthn/browser": "^11.0.0",
+    "@simplewebauthn/server": "^11.0.0",
+    "@simplewebauthn/types": "^11.0.0",
+    "drizzle-orm": "^0.41.0",
     "drizzle-seed": "^0.3.1",
-    "nuxt": "^3.15.4",
-    "pg": "^8.13.3",
-    "vue": "latest"
+    "drizzle-zod": "^0.7.0",
+    "nuxt": "^3.16.1",
+    "nuxt-auth-utils": "latest",
+    "pg": "^8.14.1",
+    "vue": "latest",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.1.0",
+    "@nuxt/eslint": "^1.2.0",
     "@types/pg": "^8.11.11",
-    "consola": "^3.4.0",
+    "consola": "^3.4.2",
     "drizzle-kit": "^0.30.5",
-    "eslint": "^9.21.0",
-    "eslint-config-prettier": "^10.0.2",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier-vue": "^5.0.0",
-    "eslint-plugin-storybook": "^0.11.3",
-    "eslint-plugin-vue": "^9.32.0",
-    "prettier": "^3.5.2",
+    "eslint-plugin-storybook": "^0.11.6",
+    "eslint-plugin-vue": "^10.0.0",
+    "prettier": "^3.5.3",
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-tailwindcss": "^0.6.11"
+  },
+  "author": {
+    "name": "Rasmus Pedersen",
+    "email": "hello@rasmusp.com",
+    "url": "https://rasmusp.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/djrasmusp/invoic.in.git"
+  },
+  "bugs": {
+    "url": "https://github.com/djrasmusp/invoic.in/issues"
   }
 }
