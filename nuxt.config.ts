@@ -9,7 +9,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     database: process.env.NUXT_POSTGRES_URL,
   },
-  modules: ['@nuxt/eslint', 'nuxt-auth-utils'],
+  modules: ['@nuxt/eslint', 'nuxt-auth-utils', '@nuxt/ui'],
+  css: ['~/assets/css/main.css'],
   auth: {
     webAuthn: true,
   },

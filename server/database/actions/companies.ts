@@ -7,7 +7,7 @@ import {
   inArray,
   isNotNull,
 } from 'drizzle-orm'
-import type { Pagenation, PagenationParams } from '#shared/types'
+import type { Pagenation, PagenationParams, Company } from '#shared/types'
 import { primaryKeyTransformer } from '~~/server/database/utils'
 
 export async function getCompanies({

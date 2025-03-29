@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { createUser } from '~~/server/database/actions/users'
+import { AuthLoginFormSchema } from '#shared/schemas'
 
 defineRouteMeta({
   openAPI: {
@@ -33,10 +34,7 @@ defineRouteMeta({
 export default defineEventHandler(async (event) => {
   const { email, password } = await readValidatedBody(
     event,
-    z.object({
-      email: z.string().email(),
-      password: z.string().min(8),
-    }).parse
+    AuthLoginFormSchema.parse
   )
 
   const hashedPassword = await hashPassword(password)

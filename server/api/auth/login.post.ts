@@ -1,5 +1,6 @@
 import { getUserByEmail } from '~~/server/database/actions/users'
 import { z } from 'zod'
+import { AuthLoginFormSchema } from '#shared/schemas'
 
 const invalidCredentialsError = createError({
   statusCode: 401,
@@ -9,10 +10,7 @@ const invalidCredentialsError = createError({
 export default defineEventHandler(async (event) => {
   const { email, password } = await readValidatedBody(
     event,
-    z.object({
-      email: z.string().email(),
-      password: z.string().min(8),
-    }).parse
+    AuthLoginFormSchema.parse
   )
 
   const user = await getUserByEmail(email)
